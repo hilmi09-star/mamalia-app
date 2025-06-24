@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prediksi Gambar Mamalia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out both;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-sky-100 to-blue-200 min-h-screen flex items-center justify-center px-4 py-10">
+
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg p-8 animate-fadeInUp">
+    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6 animate-fadeInUp">
+      Deteksi Mamalia dari Gambar
+    </h1>
+
+    <form action="/" method="POST" enctype="multipart/form-data" class="space-y-5 animate-fadeInUp">
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-600">Pilih Gambar</label>
+        <input type="file" name="image" accept="image/*" required onchange="previewImage(event)"
+               class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400" />
+      </div>
+
+      <button type="submit"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105">
+        Prediksi
+      </button>
+    </form>
+
+    {% if image %}
+    <div class="mt-6 text-center animate-fadeInUp">
+      <h4 class="text-md font-medium text-gray-700 mb-2">Gambar yang diunggah:</h4>
+      <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="Gambar Mamalia"
+           class="w-full max-h-80 object-contain rounded-lg border border-gray-300 mx-auto transition duration-300 ease-in-out hover:scale-105" />
+    </div>
+    {% endif %}
+
+    {% if message %}
+    <div class="mt-6 animate-fadeInUp">
+      <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg shadow">
+        {{ message | safe }}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        let output = document.querySelector('.preview');
+        if (!output) {
+          const img = document.createElement('img');
+          img.src = reader.result;
+          img.className = 'preview w-full max-h-80 object-contain mt-6 rounded-lg border border-gray-300 animate-fadeInUp';
+          document.querySelector('.container')?.appendChild(img);
+        } else {
+          output.src = reader.result;
+        }
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
+</body>
+</html>
